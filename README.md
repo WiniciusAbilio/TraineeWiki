@@ -1,2 +1,0 @@
-# TraineeWiki
-wuoah
