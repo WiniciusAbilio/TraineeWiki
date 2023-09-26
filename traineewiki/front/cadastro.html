@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Cadastro</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        main{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .cadastro-container {
+            display: block;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            margin-top: 35%;
+        }
+        .cadastro-container h2 {
+            text-align: center;
+        }
+        .cadastro-container form {
+            display: flex;
+            flex-direction: column;
+        }
+        .cadastro-container label, .cadastro-container input, .cadastro-container select, .cadastro-container textarea {
+            margin-bottom: 10px;
+        }
+        .cadastro-container input[type="text"],
+        .cadastro-container input[type="email"],
+        .cadastro-container input[type="password"],
+        .cadastro-container input[type="tel"],
+        .cadastro-container input[type="date"],
+        .cadastro-container select,
+        .cadastro-container textarea {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        .cadastro-container input[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .cadastro-container input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <div class="cadastro-container">
+            <h2>Cadastro</h2>
+            <form action="http://localhost:3010/usuario"" method="post">
+                <label for="nome">Nome Completo:</label>
+                <input type="text" id="nome" name="nome" required>
+    
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+    
+                <label for="senha">Senha:</label>
+                <input type="password" id="senha" name="senha" required>
+    
+                <label for="altura">Altura (em cm):</label>
+                <input type="number" id="altura" name="altura" required>
+    
+                <label for="peso">Peso (em kg):</label>
+                <input type="number" id="peso" name="peso" required>
+    
+                <label for="data_nascimento">Data de Nascimento:</label>
+                <input type="date" id="data_nascimento" name="data_nascimento" required>
+    
+                <label for="cidade">Cidade:</label>
+                <input type="text" id="cidade" name="cidade" required>
+    
+                <label for="estado">Estado:</label>
+                <input type="text" id="estado" name="estado" required>
+    
+                <label for="genero">Gênero:</label>
+                <select id="genero" name="genero" required>
+                    <option value="masculino">Masculino</option>
+                    <option value="feminino">Feminino</option>
+                    <option value="outro">Outro</option>
+                </select>
+    
+                <label for="descricao">Descrição:</label>
+                <textarea id="descricao" name="descricao" rows="4" required></textarea>
+    
+                <label for="telefone">Telefone:</label>
+                <input type="tel" id="telefone" name="telefone" required>
+    
+                <input type="submit" value="Cadastrar">
+            </form>
+        </div>
+    </main>
+</body>
+</html>
