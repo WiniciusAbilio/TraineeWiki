@@ -12,7 +12,6 @@ function LoginPage() {
           <div className='h-[70%] md:h-[50%] flex flex-col justify-center items-center'>
             <form action="processar_login.php" method="post">
               <div className='flex flex-col w-full md:w-80'>
-                <h2 className={`${styles.messageh2} text-center text-black md:2xl text-3xl font-semibold mb-4`}>Coloque seu email e sua senha!</h2>
                 <div className='mb-7'>
                   <label htmlFor="Email" className="text-sm font-medium text-gray-700">Email:</label>
                   <input
