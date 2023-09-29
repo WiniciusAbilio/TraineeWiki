@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from '@/styles/login.module.css';
+import Link from 'next/link';
 
 function LoginPage() {
   return (
@@ -19,7 +20,7 @@ function LoginPage() {
                     id="email"
                     name="email"
                     required
-                    className={`${styles.inputLogin} mt-1 p-2 w-full border focus:outline-none focus:ring focus:border-blue-300`}
+                    className={`${styles.inputborder} mt-1 p-2 w-full border focus:outline-none focus:ring focus:border-blue-300`}
                   />
                 </div>
                 <div className='flex flex-col items-start'>
@@ -29,7 +30,7 @@ function LoginPage() {
                     id="password"
                     name="password"
                     required
-                    className={`${styles.inputLogin} mt-1 p-2 w-full border focus:outline-none focus:ring focus:border-blue-300`}
+                    className={`${styles.inputborder} mt-1 p-2 w-full border focus:outline-none focus:ring focus:border-blue-300`}
                   />
                 </div>
                 <div className='flex justify-center items-end h-28'>
@@ -39,7 +40,7 @@ function LoginPage() {
             </form>
             <div className='mt-4 text-center text-black'>Não tem uma conta?</div>
             <div className='text-center text-lg font-bold'>
-              <a className='text-[#74E582] hover:underline' href='#'>Registre-se</a>
+              <Link className='text-[#74E582] hover:underline' href='/cadastro'>Registre-se</Link>
             </div>
           </div>
         </div>
