@@ -24,11 +24,11 @@ function LoginPage() {
                   />
                 </div>
                 <div className='flex flex-col items-start'>
-                  <label htmlFor="password" className="text-sm font-medium text-gray-700">Senha:</label>
+                  <label htmlFor="senha" className="text-sm font-medium text-gray-700">Senha:</label>
                   <input
                     type="password"
-                    id="password"
-                    name="password"
+                    id="senha"
+                    name="senha"
                     required
                     className={`${styles.inputborder} mt-1 p-2 w-full border focus:outline-none focus:ring focus:border-blue-300`}
                   />

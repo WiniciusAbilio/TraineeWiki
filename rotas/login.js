@@ -24,14 +24,13 @@ router.post('/login', (req, res) => {
         res.status(401).json({ message: 'Usuário não encontrado' });
       } else {
         const user = result[0];
-        if (user.senha === md5(senha)) {
+        if (user.senha == md5(senha)) {
           // Senha correta, pode criar uma sessão de usuário
           req.session.user = user; // Isso pressupõe que você tenha configurado a sessão anteriormente
-          console.log(req.session.user)
-          res.status(200).json({ message: 'Login bem-sucedido' });
+          res.redirect('http://localhost:3000/HomePage');
         } else {
           // Senha incorreta
-          res.status(401).json({ message: 'Senha incorreta' });
+          res.redirect('http://localhost:3000/');
         }
       }
   
