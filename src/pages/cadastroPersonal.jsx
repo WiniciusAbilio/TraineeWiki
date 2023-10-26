@@ -3,10 +3,12 @@ import Link from 'next/link';
 import styles from '@/styles/login.module.css';
 import CidadesPorEstado from '../Components/Utils/cidadesPorEstado.jsx';
 
-function CadastroPage() {
+
+function CadastroPagePersonal() {
+
   return (
         <div className="bg-gray-100 min-h-screen flex justify-center items-center">
-            <div className="cadastro-container bg-white text-black p-6 rounded-lg shadow-md w-96 flex flex-col justify-center w-full items-center md:w-4/5 md:h-5/6 lg:w-3/5 xl:w-2/5">
+            <div className="cadastro-container bg-white text-black p-6 rounded-lg shadow-md  flex flex-col justify-center w-full items-center md:w-4/5 md:h-5/6 lg:w-3/5 xl:w-2/5">
                 <h2 className="text-center text-2xl font-semibold mb-4">Cadastro</h2>
                 <div className='flex flex-col justify-center items-center'>
                     <form action="http://localhost:3010/usuario" method="post">
@@ -66,6 +68,14 @@ function CadastroPage() {
                                         required
                                         className={`mt-1 p-2 border ${styles.inputborder} w-full focus:outline-none focus:ring focus:border-blue-300`}
                                     />
+                                    <label htmlFor="cpf" className="text-sm font-medium text-gray-700">CPF:</label>
+                                    <input
+                                        type="text"
+                                        id="cpf"
+                                        name="cpf"
+                                        required
+                                        className={`mt-1 p-2 border w-full ${styles.inputborder} focus:outline-none focus:ring focus:border-blue-300`}
+                                    /> 
                                 </div>
                                 <div className='ml-5 w-[50%]'>
                                     <CidadesPorEstado />
@@ -110,7 +120,7 @@ function CadastroPage() {
                 </div>
             </div>
         </div>
-  );
+    );
 }
 
-export default CadastroPage;
+export default CadastroPagePersonal;

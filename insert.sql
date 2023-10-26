@@ -24,5 +24,9 @@
   'Uma breve descrição opcional',
   '(11)9876-5432'
 );**/
- use mydb;
-SELECT * FROM usuario;
+
+use mydb;
+SELECT * FROM Usuario;
+
+
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';

@@ -20,14 +20,14 @@ router.get('/personal', (req, res) => {
 
 // Rota para criar um novo registro de Personal
 router.post('/personal', urlencodedParser, (req, res) => {
-  const { certficacao, Usuario_email } = req.body;
-  if (!certficacao || !Usuario_email) {
-    res.status(400).json({ error: 'Os campos "certficacao" e "Usuario_email" são obrigatórios.' });
+  const { cpf, Usuario_email } = req.body;
+  if (!cpf || !Usuario_email) {
+    res.status(400).json({ error: 'Os campos "cpf" e "Usuario_email" são obrigatórios.' });
     return;
   }
-  const values = [certficacao, Usuario_email];
+  const values = [cpf, Usuario_email];
   
-  db.query('INSERT INTO Personal (certficacao, Usuario_email) VALUES (?, ?)', values, (err, result) => {
+  db.query('INSERT INTO Personal (cpf, Usuario_email) VALUES (?, ?)', values, (err, result) => {
     if (err) {
       res.status(500).json({ error: err.message });
       return;
@@ -39,14 +39,14 @@ router.post('/personal', urlencodedParser, (req, res) => {
 // Rota para atualizar um registro de Personal
 router.put('/personal/:Usuario_email', urlencodedParser, (req, res) => {
   const { Usuario_email } = req.params;
-  const { certficacao } = req.body;
-  if (!certficacao) {
-    res.status(400).json({ error: 'O campo "certficacao" é obrigatório.' });
+  const { cpf } = req.body;
+  if (!cpf) {
+    res.status(400).json({ error: 'O campo "cpf" é obrigatório.' });
     return;
   }
-  const values = [certficacao, Usuario_email];
+  const values = [cpf, Usuario_email];
   
-  db.query('UPDATE Personal SET certficacao = ? WHERE Usuario_email = ?', values, (err, result) => {
+  db.query('UPDATE Personal SET cpf = ? WHERE Usuario_email = ?', values, (err, result) => {
     if (err) {
       res.status(500).json({ error: err.message });
       return;

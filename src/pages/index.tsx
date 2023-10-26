@@ -10,8 +10,8 @@ function LoginPage() {
           <h2 className="text-center text-black text-2xl font-semibold mb-4">Faça Login</h2>
         </div>
         <div className='flex flex-col justify-center items-center'>
-          <div className='h-[70%] md:h-[50%] flex flex-col justify-center items-center'>
-            <form action="processar_login.php" method="post">
+          <div className='h-[70%] md:h-[50%] w-full flex flex-col justify-center items-center'>
+            <form action="http://localhost:3010/login" method="post">
               <div className='flex flex-col w-full md:w-80'>
                 <div className='mb-7'>
                   <label htmlFor="Email" className="text-sm font-medium text-gray-700">Email:</label>
@@ -24,11 +24,11 @@ function LoginPage() {
                   />
                 </div>
                 <div className='flex flex-col items-start'>
-                  <label htmlFor="password" className="text-sm font-medium text-gray-700">Senha:</label>
+                  <label htmlFor="senha" className="text-sm font-medium text-gray-700">Senha:</label>
                   <input
                     type="password"
-                    id="password"
-                    name="password"
+                    id="senha"
+                    name="senha"
                     required
                     className={`${styles.inputborder} mt-1 p-2 w-full border focus:outline-none focus:ring focus:border-blue-300`}
                   />
@@ -40,7 +40,7 @@ function LoginPage() {
             </form>
             <div className='mt-4 text-center text-black'>Não tem uma conta?</div>
             <div className='text-center text-lg font-bold'>
-              <Link className='text-[#74E582] hover:underline' href='/cadastro'>Registre-se</Link>
+              <Link className='text-[#74E582] hover:underline' href='/chooseRegister'>Registre-se</Link>
             </div>
           </div>
         </div>

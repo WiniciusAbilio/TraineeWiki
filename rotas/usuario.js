@@ -19,15 +19,31 @@ router.get('/usuario', (req, res) => {
 
 // Rota para criar um novo usuário
 router.post('/usuario', urlencodedParser, (req, res) => {
-  const { email, nome, senha, altura, peso, data_nascimento, cidade, estado, genero, descricao, telefone } = req.body;
+  const { email, nome, senha, altura, peso, data_nascimento, cpf, cidade, estado, genero, descricao, telefone } = req.body;
   const values = [email, nome, md5(senha), altura, peso, data_nascimento, cidade, estado, genero, descricao, telefone];
   
+  if(cpf != undefined){
+    const url = 'http://localhost:3010/personal';
+    const dados = {
+      cpf: cpf,
+      Usuario_email: email
+    };
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dados)
+      });
+  }
+
   db.query('INSERT INTO Usuario (email, nome, senha, altura, peso, data_nascimento, cidade, estado, genero, descricao, telefone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', values, (err, result) => {
     if (err) {
       res.status(500).json({ error: err.message });
       return;
     }
-    res.json({ message: 'Usuário criado com sucesso!', insertId: result.insertId });
+    res.redirect('http://localhost:3000/');
   });
 });
 
