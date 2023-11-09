@@ -20,7 +20,7 @@ router.get('/usuario', (req, res) => {
 // Rota para criar um novo usuário
 router.post('/usuario', urlencodedParser, (req, res) => {
   const { email, nome, senha, altura, peso, data_nascimento, cpf, cidade, estado, genero, descricao, telefone } = req.body;
-  const values = [email, nome, md5(senha), altura, peso, data_nascimento, cidade, estado, genero, descricao, telefone];
+  const values = [email, nome, md5(toString(senha)), altura, peso, data_nascimento, cidade, estado, genero, descricao, telefone];
   
   if(cpf != undefined){
     const url = 'http://localhost:3010/personal';

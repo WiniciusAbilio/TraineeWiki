@@ -4,17 +4,16 @@ const db = require('../src/conexaoMySQL.js'); // Importe a conexão com o MySQL
 const md5 = require('md5')
 
 const bodyParser = require('body-parser');
-
+const jwt = require('jsonwebtoken');
 router.use(bodyParser.urlencoded({ extended: true }));
 
 
 
 // Rota para logar
 router.post('/login', (req, res) => {
-    const { email, senha } = req.body;
+    const { email, senha} = req.body;
 
     db.query('SELECT * FROM Usuario WHERE email = ?', email, (err, result) => {
-
       if (err) {
         res.status(500).json({ error: err.message });
         return;
@@ -24,10 +23,35 @@ router.post('/login', (req, res) => {
         res.status(401).json({ message: 'Usuário não encontrado' });
       } else {
         const user = result[0];
-        if (user.senha == md5(senha)) {
-          // Senha correta, pode criar uma sessão de usuário
-          req.session.user = user; // Isso pressupõe que você tenha configurado a sessão anteriormente
-          res.redirect('http://localhost:3000/HomePage');
+        const senhaHash = md5(senha);
+        if (user.senha == senhaHash) {
+          // Senha correta, pode criar uma token de usuário
+          const payload = {
+            email: user.email,
+            nome: user.nome,
+            altura: user.altura,
+            peso: user.peso,
+            data_nascimento: user.data_nascimento,
+            cidade: user.cidade,
+            estado: user.estado,
+            genero: user.genero,
+            descricao: user.descricao,
+            telefone: user.telefone
+          };
+      
+          // Chave secreta para assinar o token (mantenha isso em segredo em um ambiente real)
+          const chaveSecreta = 'chave_secreta';
+      
+          // Configurações do token (pode incluir expiração, algoritmo, etc.)
+          const opcoes = {
+            expiresIn: '1h', // Expira em 1 hora
+          };
+      
+          // Assina o token com o payload, chave secreta e opções
+          const token = jwt.sign(payload, chaveSecreta, opcoes);
+      
+          // Retorna um JSON com o token
+          res.json({ token });
         } else {
           // Senha incorreta
           res.redirect('http://localhost:3000/');
