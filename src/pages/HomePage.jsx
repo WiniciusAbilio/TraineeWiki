@@ -1,10 +1,22 @@
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faBars, faSearch, faBell} from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
-
+import { verificaTokenValido } from '../Components/Utils/autenticador';
 
 const EcommerceHomePage = () => {
+
+    const router = useRouter();
+
+    useEffect(() => {
+        if (!verificaTokenValido()) {
+            router.push('/');
+            return;
+        }
+    }, []);
+
+
 
     const handleContextMenu = (event) => {
         event.preventDefault();

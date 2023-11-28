@@ -5,8 +5,23 @@ import Link from 'next/link';
 import styles from '@/styles/login.module.css';
 import CidadesPorEstado from '../Components/Utils/cidadesPorEstado.jsx';
 
+import { useRouter } from 'next/router';
+import { verificaTokenValido } from '../Components/Utils/autenticador';
+
+
 
 const EcommerceHomePage = () => {
+
+    const router = useRouter();
+
+    useEffect(() => {
+        if (!verificaTokenValido()) {
+            router.push('/');
+            return;
+        }
+    }, []);
+
+
 
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
