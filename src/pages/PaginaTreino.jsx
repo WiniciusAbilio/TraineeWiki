@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faBell } from '@fortawesome/free-solid-svg-icons';
 import { dadosToken, verificaTokenValido } from '../Components/Utils/autenticador';
 import axios from 'axios'
 import Logout from '../Components/Utils/logout';

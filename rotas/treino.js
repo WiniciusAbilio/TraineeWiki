@@ -25,7 +25,7 @@ router.post('/treino', (req, res) => {
   }
   const values = [nome_exercicio, repeticoes, series, Usuario_email];
 
-  db.query('INSERT INTO treino (nome_exercicio, repeticoes, series, Usuario_email) VALUES (?, ?, ?, ?)', values, (err, result) => {
+  db.query('INSERT INTO Treino (nome_exercicio, repeticoes, series, Usuario_email) VALUES (?, ?, ?, ?)', values, (err, result) => {
     if (err) {
       res.status(500).json({ error: err.message });
       return;
