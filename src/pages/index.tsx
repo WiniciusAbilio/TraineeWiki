@@ -1,10 +1,19 @@
-import { useState, FormEvent } from 'react';
+import { useState, FormEvent, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import styles from '@/styles/login.module.css';
 import Link from 'next/link';
+import { verificaTokenValido } from '../Components/Utils/autenticador';
 
 function LoginPage() {
   const router = useRouter();
+
+  useEffect(() => {
+      if (verificaTokenValido()) {
+          router.push('/HomePage');
+          return;
+      }
+  }, []);
+
   const [email, setEmail] = useState('');
   const [senha, setPassword] = useState('');
 

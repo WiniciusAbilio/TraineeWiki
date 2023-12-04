@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 
 export default function handler(req, res) {
-  const directoryPath = path.join(process.cwd(), 'src', 'Pictures'); // caminho para a pasta de imagens
+  const directoryPath = path.join(process.cwd(), 'Public', 'Pictures', 'Treinos'); // caminho para a pasta de imagens
 
   // Lê os arquivos da pasta e filtra apenas as imagens
   const files = fs.readdirSync(directoryPath).filter(file => {

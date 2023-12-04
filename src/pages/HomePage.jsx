@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faBars, faSearch, faBell} from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
 import { verificaTokenValido } from '../Components/Utils/autenticador';
+import Logout from '../Components/Utils/logout';
 
 const EcommerceHomePage = () => {
 
@@ -63,29 +64,44 @@ const EcommerceHomePage = () => {
     <div className="bg-[#D9D9D9] flex">
       {/* Barra lateral */}
       <div className={`bg-[#66DA6E] text-white w-64 ${isSidebarOpen ? '' : 'hidden'}`}>
-        <div className=" flex justify-center mt-16 p-4">
-            <div className='flex flex-col '>
-                <div className='flex mb-10 flex-col '>
-                    <a href="#" className="text-white font-semibold text-2xl hover:underline">
-                        Matchs
-                    </a>
-                    <a href="#" className="text-white mt-8 font-semibold text-2xl hover:underline">
-                        Personais
-                    </a>
-                </div>
-                <div className='flex flex-col' >
-                    <h2 className="text-2xl mb-4 font-bold">Treinos</h2>
-                    <div className='h-[0.125rem] mb-4 w-5/6 bg-white'></div>
-                    <a href="#" className="text-white font-semibold text-2xl hover:underline">
-                        Treino A
-                    </a>
-                    <a href="#" className="text-white mt-8 font-semibold text-2xl hover:underline">
-                        Treino B
-                    </a>
+                <div className=" flex justify-center mt-16 p-4">
+                    <div className='flex flex-col '>
+                        <div className='flex mb-10 flex-col '>
+                            <div>
+                            </div>
+                            <div>
+                                <a href="TelaGymBro" className="text-white font-semibold text-2xl hover:underline">
+                                    GymBros
+                                </a>
+                            </div>
+                            <div>
+                                <a href="#" className="text-white mt-8 font-semibold text-2xl hover:underline">
+                                    Personais
+                                </a>
+                            </div>
+                            <div>
+                                <a href="#" className="text-white font-semibold text-2xl hover:underline">
+                                    Matchs
+                                </a>
+                            </div>
+                        </div>
+                        <div className='flex flex-col' >
+                            <div className='h-[0.125rem] mb-4 w-5/6 bg-white'></div>
+                            <a href="PaginaTreino" className="text-white font-semibold text-2xl hover:underline">
+                                Treinos
+                            </a>
+                        </div>
+                        <div>
+                            <a href="EditarUsuario" className="text-white font-semibold text-2xl hover:underline">
+                                Editar Perfil
+                            </a>
+                        </div>
+                        <div>
+                            <Logout/>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-      </div>
       {/* Conteúdo principal */}
       <div className="flex-1 flex  h-full justify-between flex-col">
         {/* Barra de navegação superior */}
@@ -98,8 +114,8 @@ const EcommerceHomePage = () => {
                 <h1 className="text-3xl font-semibold">TreinoWiki</h1>
             </div>
             <div className="flex space-x-4 mt-2 mr-10">
-                <a href="#" className="text-white font-semibold text-2xl hover:underline">
-                    GymBroo
+                <a href="/HomePage" className="text-white font-semibold text-2xl hover:underline">
+                    GymBro
                 </a>
                 <a href="#" className="text-white hover:underline">
                 <FontAwesomeIcon size="2x" icon={faBell} />

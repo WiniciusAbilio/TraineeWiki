@@ -55,17 +55,13 @@ ENGINE = InnoDB;
 -- Table `mydb`.`Treino`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `mydb`.`Treino` (
-  `nome_treino` VARCHAR(45) NOT NULL,
+  `idTreino` int AUTO_INCREMENT NOT NULL ,
   `nome_exercicio` VARCHAR(45) NOT NULL,
   `repeticoes` VARCHAR(45) NOT NULL,
   `series` VARCHAR(45) NOT NULL,
   `Usuario_email` VARCHAR(100) NOT NULL,
-  PRIMARY KEY (`Usuario_email`),
-  CONSTRAINT `fk_Treino_Usuario1`
-    FOREIGN KEY (`Usuario_email`)
-    REFERENCES `mydb`.`Usuario` (`email`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  PRIMARY KEY (`idTreino`),
+  FOREIGN KEY (`Usuario_email`) REFERENCES `mydb`.`Usuario` (`email`))
 ENGINE = InnoDB;
 
 
