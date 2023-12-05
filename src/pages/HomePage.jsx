@@ -10,24 +10,24 @@ import axios from 'axios';
 const EcommerceHomePage = () => {
     const router = useRouter();
     const [imageFiles, setImageFiles] = useState([]);
-    const [usuarios, setUsuarios] = useState([]);
+    const [treino, setTreino] = useState([]);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   
     useEffect(() => {
       if (!verificaTokenValido()) {
         router.push('/');
       } else {
-        const getUsuarios= async () => {
+        const getTreino= async () => {
           try {
             const email = dadosToken().email;
-            const response = await axios.get(`http://localhost:3010/usuario`);
-            setUsuarios(response.data.data);
+            const response = await axios.get(`http://localhost:3010/treino?email=${email}`);
+            setTreino(response.data.data);
           } catch (error) {
             console.error('Erro ao buscar treinos por email:', error);
           }
         };
   
-        getUsuarios();
+        getTreino();
       }
     }, [router]);
 
@@ -51,8 +51,8 @@ const EcommerceHomePage = () => {
             const response = await axios.delete(`http://localhost:3010/treino/${treinoId}`);
             console.log(response.data);
             // Remova o treino da lista local
-            const updatedTreinos = treinos.filter((treino) => treino.idTreino !== treinoId);
-            setUsuarios(updatedTreinos);
+            const updatedTreinos = treino.filter((treino) => treino.idTreino !== treinoId);
+            setTreino(updatedTreinos);
 
         } catch (error) {
           console.error('Erro ao excluir treino:', error);
@@ -143,7 +143,7 @@ const EcommerceHomePage = () => {
           {/* Cards */}
           <div className='flex flex-wrap w-3/4 justify-center'>
             {/* Cards */}
-            {treinos.map((treino, index) => (
+            {treino.map((treino, index) => (
               <div key={index} className="flex flex-col justify-center m-4 w-64 p-4 bg-white rounded-md shadow-md">
 
                 <h2 className="text-lg text-black font-semibold mt-2">{treino.nome_exercicio}</h2>

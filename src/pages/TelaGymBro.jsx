@@ -10,20 +10,20 @@ import Logout from '../Components/Utils/logout';
 const EcommerceHomePage = () => {
   const router = useRouter();
 
-  const [userData, setUserData] = useState({});
+  const [usuarios, setUsuarios] = useState([]);
 
   useEffect(() => {
-    const fetchUserData = async () => {
+    const fetchUsuarios = async () => {
       try {
         const response = await axios.get('http://localhost:3010/usuario');
-        setUserData(response.data.usuarios[0]);
+        setUsuarios(response.data.usuarios);
       } catch (error) {
-        console.error('Erro ao buscar usuário:', error);
+        console.error('Erro ao buscar usuários:', error);
       }
     };
 
     if (verificaTokenValido()) {
-      fetchUserData();
+      fetchUsuarios();
     } else {
       router.push('/');
     }
@@ -35,16 +35,49 @@ const EcommerceHomePage = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
+
   return (
     <div className="bg-[#D9D9D9] flex">
       {/* Barra lateral */}
       <div className={`bg-[#66DA6E] text-white w-64 ${isSidebarOpen ? '' : 'hidden'}`}>
-        <div className=" flex justify-center mt-16 p-4">
-          <div className='flex flex-col '>
-            {/* ... (conteúdo da barra lateral anterior) */}
-          </div>
-        </div>
-      </div>
+                <div className=" flex justify-center mt-16 p-4">
+                    <div className='flex flex-col '>
+                        <div className='flex mb-10 flex-col '>
+                            <div>
+                            </div>
+                            <div>
+                                <a href="TelaGymBro" className="text-white font-semibold text-2xl hover:underline">
+                                    GymBros
+                                </a>
+                            </div>
+                            <div>
+                                <a href="#" className="text-white mt-8 font-semibold text-2xl hover:underline">
+                                    Personais
+                                </a>
+                            </div>
+                            <div>
+                                <a href="#" className="text-white font-semibold text-2xl hover:underline">
+                                    Matchs
+                                </a>
+                            </div>
+                        </div>
+                        <div className='flex flex-col' >
+                            <div className='h-[0.125rem] mb-4 w-5/6 bg-white'></div>
+                            <a href="PaginaTreino" className="text-white font-semibold text-2xl hover:underline">
+                                Treinos
+                            </a>
+                        </div>
+                        <div>
+                            <a href="EditarUsuario" className="text-white font-semibold text-2xl hover:underline">
+                                Editar Perfil
+                            </a>
+                        </div>
+                        <div>
+                            <Logout/>
+                        </div>
+                    </div>
+                </div>
+            </div>
       {/* Conteúdo principal */}
       <div className="flex-1 flex  h-full justify-between flex-col">
         {/* Barra de navegação superior */}
@@ -80,22 +113,24 @@ const EcommerceHomePage = () => {
         </header>
         {/* Conteúdo principal */}
         <main className="flex flex-wrap h-full  justify-center">
-          <div className='flex flex-wrap w-3/4 justify-center'>
-            {/* Card do Usuário */}
-            <div className="flex flex-col justify-center m-4 w-64 p-4 bg-white rounded-md shadow-md">
-              <h2 className="text-lg text-black font-semibold mt-2">{userData.nome}</h2>
-              <p>Peso: {userData.peso} kg</p>
-              <p>Altura: {userData.altura} cm</p>
-              <p>Cidade: {userData.cidade}</p>
-              <p>Estado: {userData.estado}</p>
-              <Link href={`/Perfil?email=${userData.email}`} passHref>
+        <div className='flex flex-wrap w-3/4 justify-center'>
+          {/* Cards de Usuários */}
+          {usuarios.map((usuario, index) => (
+            <div key={index} className="flex flex-col justify-center m-4 w-64 p-4 bg-white rounded-md shadow-md">
+              <h2 className="text-lg text-black font-semibold mt-2">{usuario.nome}</h2>
+              <p>Peso: {usuario.peso} kg</p>
+              <p>Altura: {usuario.altura} cm</p>
+              <p>Cidade: {usuario.cidade}</p>
+              <p>Estado: {usuario.estado}</p>
+              <Link href={`/Perfil?email=${usuario.email}`} passHref>
                 <button className="bg-blue-500 text-white mt-4 py-2 px-4 rounded-md hover:bg-blue-700">
                   Ver Perfil
                 </button>
               </Link>
             </div>
-          </div>
-        </main>
+          ))}
+        </div>
+      </main>
         {/* Rodapé */}
         <footer className="bg-[#7AE582] p-4 shadow-md text-center">
           <p>&copy; 2023 TraineWiki. Todos os direitos reservados.</p>
