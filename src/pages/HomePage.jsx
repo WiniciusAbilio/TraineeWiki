@@ -3,44 +3,35 @@ import { useRouter } from 'next/router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faBars, faSearch, faBell} from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
-import { verificaTokenValido } from '../Components/Utils/autenticador';
+import { dadosToken, verificaTokenValido } from '../Components/Utils/autenticador';
 import Logout from '../Components/Utils/logout';
+import axios from 'axios';
 
 const EcommerceHomePage = () => {
-
     const router = useRouter();
-
-    useEffect(() => {
-        if (!verificaTokenValido()) {
-            router.push('/');
-            return;
-        }
-    }, []);
-
-
-
-    const handleContextMenu = (event) => {
-        event.preventDefault();
-        const contextMenu = document.getElementById('contextMenu');
-        contextMenu.style.top = `${event.clientY}px`;
-        contextMenu.style.left = `${event.clientX}px`;
-        contextMenu.style.display = 'block';
-    };
-
-    const handleAddToWorkout = () => {
-        // Implement your logic for adding to workout here
-        const contextMenu = document.getElementById('contextMenu');
-        contextMenu.style.display = 'none';
-    };
-
-    const handleCancel = () => {
-        const contextMenu = document.getElementById('contextMenu');
-        contextMenu.style.display = 'none';
-    };
-
-
     const [imageFiles, setImageFiles] = useState([]);
+    const [usuarios, setUsuarios] = useState([]);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  
+    useEffect(() => {
+      if (!verificaTokenValido()) {
+        router.push('/');
+      } else {
+        const getUsuarios= async () => {
+          try {
+            const email = dadosToken().email;
+            const response = await axios.get(`http://localhost:3010/usuario`);
+            setUsuarios(response.data.data);
+          } catch (error) {
+            console.error('Erro ao buscar treinos por email:', error);
+          }
+        };
+  
+        getUsuarios();
+      }
+    }, [router]);
 
+  
     useEffect(() => {
       const fetchImageList = async () => {
         try {
@@ -51,15 +42,26 @@ const EcommerceHomePage = () => {
           console.error('Error fetching image list:', error);
         }
       };
+  
       fetchImageList();
     }, []);
+  
+    const handleDeleteFromWorkout = async (treinoId) => {
+        try {
+            const response = await axios.delete(`http://localhost:3010/treino/${treinoId}`);
+            console.log(response.data);
+            // Remova o treino da lista local
+            const updatedTreinos = treinos.filter((treino) => treino.idTreino !== treinoId);
+            setUsuarios(updatedTreinos);
 
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+        } catch (error) {
+          console.error('Erro ao excluir treino:', error);
+        }
+      };
 
     const toggleSidebar = () => {
-        setIsSidebarOpen(!isSidebarOpen);
+      setIsSidebarOpen((prev) => !prev);
     };
-
   return (
     <div className="bg-[#D9D9D9] flex">
       {/* Barra lateral */}
@@ -133,50 +135,28 @@ const EcommerceHomePage = () => {
                     <FontAwesomeIcon icon={faSearch} color="#AAA1A1" className="mr-2" />
                 </div>
             </div>
-            <div className='flex flex-row  mt-10 justify-center w-full'>
-                <button className="bg-[#2BB4DF] mr-20 w-32 text-white mt-4 py-2 px-4 rounded-3xl hover:bg-blue-700">
-                    Peito
-                </button>
-                <button className="bg-[#2BB4DF] mr-20 w-32 text-white mt-4 py-2 px-4 rounded-3xl hover:bg-blue-700">
-                    Ombro
-                </button>
-                <button className="bg-[#2BB4DF] mr-20 w-32 text-white mt-4 py-2 px-4 rounded-3xl hover:bg-blue-700">
-                    Perna
-                </button>
-                <button className="bg-[#2BB4DF] mr-20 w-32 text-white mt-4 py-2 px-4 rounded-3xl hover:bg-blue-700">
-                    Braço
-                </button>
-                <button className="bg-[#2BB4DF] mr-20 w-32 text-white mt-4 py-2 px-4 rounded-3xl hover:bg-blue-700">
-                    toraz
-                </button>
-            </div>
         </div>
         </header>
         {/* Conteúdo principal */}
         <main className="flex flex-wrap h-full  justify-center">
         <div className='flex flex-wrap w-3/4 justify-center'>
-                {/* Cards */}
-                <div className='flex flex-wrap w-3/4 justify-center'>
-                {/* Cards */}
-                <div id="contextMenu" className="context-menu" style={{ display: 'none' }}>
-                    <ul className="bg-[#7AE582] border border-gray-300 w-32">
-                        <li className="p-2 hover:bg-[#3e7e42]" onClick={handleAddToWorkout}>Treino A</li>
-                        <li className="p-2 hover:bg-[#3e7e42]" onClick={handleCancel}>Treino B</li>
-                    </ul>
-                </div>
-                {imageFiles.map((file, index) => (
-                    <div className="flex flex-col justify-center m-4 w-64 p-4 bg-white rounded-md shadow-md" onContextMenu={handleContextMenu}>
-                        <img key={index} className="w-full h-32 object-cover object-center rounded-md" src={`/..Pictures/${file}`} alt="Product" />
-                        <h2 className="text-lg text-black font-semibold mt-2">{file.replace(".png", "").replace(".jpg", "")}</h2>
-                        <button className="bg-blue-500 text-white mt-4 py-2 px-4 rounded-md hover:bg-blue-700" onClick={handleContextMenu} onContextMenu={handleContextMenu}>
-                            Adicionar ao Treino
-                        </button>
-                    </div>
-                ))}
-                
-            </div>
+          {/* Cards */}
+          <div className='flex flex-wrap w-3/4 justify-center'>
+            {/* Cards */}
+            {treinos.map((treino, index) => (
+              <div key={index} className="flex flex-col justify-center m-4 w-64 p-4 bg-white rounded-md shadow-md">
+
+                <h2 className="text-lg text-black font-semibold mt-2">{treino.nome_exercicio}</h2>
+                <p className="text-gray-600">Séries: {treino.series}</p>
+                <p className="text-gray-600">Repetições: {treino.repeticoes}</p>
+                <button className="bg-red-500 text-white mt-4 py-2 px-4 rounded-md hover:bg-red-700" onClick={() => handleDeleteFromWorkout(treino.idTreino)}>
+                    Excluir
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
-        </main>
+      </main>
         {/* Rodapé */}
         <footer className="bg-[#7AE582] p-4 shadow-md text-center">
           <p>&copy; 2023 TraineWiki. Todos os direitos reservados.</p>

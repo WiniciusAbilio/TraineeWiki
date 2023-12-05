@@ -7,7 +7,19 @@ const md5 = require('md5');
 
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 
-// ...
+router.get('/usuario', (req, res) => {
+  db.query('SELECT * FROM Usuario', (err, result) => {
+    if (err) {
+      // Se ocorrer um erro durante a consulta
+      console.error('Erro ao buscar usuários:', err);
+      res.status(500).json({ error: 'Erro ao buscar usuários.' });
+      return;
+    }
+
+    // Se a consulta for bem-sucedida, retorna os usuários
+    res.json({ usuarios: result });
+  });
+});
 
 router.post('/usuario', urlencodedParser, async (req, res) => {
   const { email, nome, senha, altura, peso, data_nascimento, cpf, cidade, estado, genero, descricao, telefone } = req.body;

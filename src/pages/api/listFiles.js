@@ -10,5 +10,5 @@ export default function handler(req, res) {
     return file.endsWith('.jpg') || file.endsWith('.png') || file.endsWith('.jpeg') || file.endsWith('.gif');
   });
 
-  res.status(200).json({ files });
+  res.status(200).json({ files, directoryPath });
 }

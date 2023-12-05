@@ -7,7 +7,16 @@ const urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 // Rota para listar todos os registros de Treino
 router.get('/treino', (req, res) => {
-  db.query('SELECT * FROM Treino', (err, results) => {
+  const userEmail = req.query.email; // Supondo que o e-mail seja passado como um parâmetro de consulta
+
+  if (!userEmail) {
+    res.status(400).json({ error: 'O parâmetro email é obrigatório.' });
+    return;
+  }
+
+  const query = 'SELECT * FROM Treino WHERE Usuario_email = ?';
+
+  db.query(query, [userEmail], (err, results) => {
     if (err) {
       res.status(500).json({ error: err.message });
       return;
@@ -15,6 +24,7 @@ router.get('/treino', (req, res) => {
     res.json({ data: results });
   });
 });
+
 
 // Rota para criar um novo registro de Treino
 router.post('/treino', (req, res) => {
@@ -33,6 +43,26 @@ router.post('/treino', (req, res) => {
     res.json({ message: 'Registro de Treino criado com sucesso!', insertId: result.insertId });
   });
 });
+
+
+router.delete('/treino/:id', (req, res) => {
+  const treinoId = req.params.id;
+
+  db.query('DELETE FROM Treino WHERE idTreino = ?', [treinoId], (err, result) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
+
+    if (result.affectedRows === 0) {
+      res.status(404).json({ error: 'Treino não encontrado.' });
+      return;
+    }
+
+    res.json({ message: 'Treino excluído com sucesso!' });
+  });
+});
+
 
 // Rota para atualizar um registro de Treino
 

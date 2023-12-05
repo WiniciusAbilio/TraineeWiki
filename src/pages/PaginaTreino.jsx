@@ -147,7 +147,7 @@ const PaginaTreino = () => {
                                 <div className="flex flex-row m-4 w-8/12 justify-between p-4 bg-white rounded-md shadow-md" onContextMenu={handleContextMenu}>
                                     <div>
                                         <h2 className="text-lg text-black font-semibold mt-2">{file.replace(".png", "").replace(".jpg", "")}</h2>
-                                        <img key={index} className="w-full h-32 object-cover object-center rounded-md" src={`/..Pictures//${file}`} alt="Product" />
+                                
                                     </div>
                                     <div className='flex flex-row justify-center text-black items-center w-4/6 h-full '>
                                         <div className='flex flex-row justify-center items-center'>
