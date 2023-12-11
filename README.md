@@ -1,40 +1,61 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# TraineeWiki
 
-## Getting Started
+Bem-vindo ao TraineeWiki - Sua plataforma para criar treinos, encontrar Gymbros e aprimorar seus resultados de treinamento físico.
 
-First, run the development server:
+## Como Iniciar
+
+Siga os passos abaixo para configurar e executar o projeto localmente.
+
+### 1. Criar Banco de Dados
+
+Certifique-se de ter um banco de dados configurado. As instruções específicas podem variar dependendo do banco de dados escolhido.
+
+### 2. Configurar Variáveis de Ambiente
+
+Crie um arquivo `.env` na raiz do projeto e adicione as seguintes variáveis de ambiente, ajustando os valores conforme necessário:
+
+```env
+DB_HOST=seu_host_do_banco
+DB_USER=seu_usuario_do_banco
+DB_PASSWORD=sua_senha_do_banco
+DB_DATABASE=seu_nome_de_banco
+PORT=3000
+```
+
+### 3. Instalar Dependências
+
+Abra um terminal na raiz do projeto e execute o seguinte comando para instalar as dependências:
+
+```bash
+npm install
+```
+
+### 4. Executar o Servidor
+
+Inicie o servidor Node.js com o seguinte comando:
+
+```bash
+node src/server.js
+```
+
+### 5. Executar o Frontend
+
+Em outro terminal, execute o aplicativo Next.js com o comando:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+O projeto agora está em execução! Abra seu navegador e acesse `http://localhost:3000` para começar a usar o TraineeWiki.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## Recursos
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+- **Criar Treinos:** Elabore planos de treino personalizados para atingir seus objetivos fitness.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+- **Encontrar Gymbros:** Conecte-se com outros entusiastas do fitness e compartilhe experiências.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- **Guias de Treinamento:** Explore guias e dicas especializadas para otimizar seus treinos.
 
-## Learn More
+- **Edição de Perfil:** Personalize suas informações de perfil para refletir seu estilo de treino.
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Lembre-se de ajustar as configurações do banco de dados, como host, usuário, senha e nome do banco de dados, conforme necessário para o seu ambiente. Divirta-se explorando e aprimorando seus treinos no TraineeWiki!
