@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faSearch, faBell } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import Link from 'next/link'; // Importe o Link do next
+import Link from 'next/link';
 import { dadosToken, verificaTokenValido } from '../Components/Utils/autenticador';
 import Logout from '../Components/Utils/logout';
 
@@ -11,19 +11,22 @@ const EcommerceHomePage = () => {
   const router = useRouter();
 
   const [usuarios, setUsuarios] = useState([]);
+  const [personais, setPersonais] = useState([]);
 
   useEffect(() => {
-    const fetchUsuarios = async () => {
+
+    const fetchPersonais = async () => {
       try {
-        const response = await axios.get('http://localhost:3010/usuario');
-        setUsuarios(response.data.usuarios);
+        const response = await axios.get('http://localhost:3010/personal');
+        console.log(response.data.personais)
+        setPersonais(response.data.personais);
       } catch (error) {
-        console.error('Erro ao buscar usuários:', error);
+        console.error('Erro ao buscar personal:', error);
       }
     };
 
     if (verificaTokenValido()) {
-      fetchUsuarios();
+      fetchPersonais();
     } else {
       router.push('/');
     }
@@ -35,6 +38,10 @@ const EcommerceHomePage = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
+  // Filtra os usuários que têm o mesmo email na tabela de personais
+  const usuariosComPersonal = usuarios.filter(usuario =>
+    personais?.some(personal => personal.email === usuario.email)
+  );
 
   return (
     <div className="bg-[#D9D9D9] flex">
@@ -100,7 +107,7 @@ const EcommerceHomePage = () => {
           </div>
           {/* Adicione o título aqui */}
           <div className='bg-[#004E64] flex flex-col w-full justify-center h-16 items-center'>
-            <h2 className="text-white text-2xl font-semibold">Lista de Gymbros</h2>
+            <h2 className="text-white text-2xl font-semibold">Lista de Personais</h2>
           </div>
           <div className='bg-[#004E64] flex flex-col w-full justify-center h-48 items-center pl-4'>
             <div className='flex flex-row'>
@@ -117,25 +124,27 @@ const EcommerceHomePage = () => {
         </header>
 
         {/* Conteúdo principal */}
-        <main className="flex flex-wrap h-full  justify-center">
-          <div className='flex flex-wrap w-3/4 justify-center'>
-            {/* Cards de Usuários */}
-            {usuarios
-              .filter(usuario => usuario.email !== dadosToken().email) // Remover o próprio usuário
-              .map((usuario, index) => (
-                <div key={index} className="flex flex-col justify-center m-4 w-64 p-4 bg-white rounded-md shadow-md">
-                  <h2 className="text-lg text-black font-semibold mt-2">{usuario.nome}</h2>
-                  <p>Peso: {usuario.peso} kg</p>
-                  <p>Altura: {usuario.altura} cm</p>
-                  <p>Cidade: {usuario.cidade}</p>
-                  <p>Estado: {usuario.estado}</p>
-                  <Link href={`/Perfil?email=${usuario.email}`} passHref>
-                    <button className="bg-blue-500 text-white mt-4 py-2 px-4 rounded-md hover:bg-blue-700">
-                      Ver Perfil
-                    </button>
-                  </Link>
-                </div>
-              ))}
+        <main className="flex flex-wrap h-full justify-center">
+          <div className="flex flex-wrap w-3/4 justify-center">
+            {/* Cards de Usuários com Personal */}
+            {personais.map((usuarioPersonal, index) => (
+              <div key={index} className="flex flex-col justify-center m-4 w-64 p-4 bg-white rounded-md shadow-md">
+                <h2 className="text-lg text-black font-semibold mt-2">{usuarioPersonal.nome}</h2>
+                <p>CPF: {usuarioPersonal.cpf}</p>
+                <p>Peso: {usuarioPersonal.peso} kg</p>
+                <p>Altura: {usuarioPersonal.altura} cm</p>
+                <p>Cidade: {usuarioPersonal.cidade}</p>
+                <p>Estado: {usuarioPersonal.estado}</p>
+                <p>Gênero: {usuarioPersonal.genero}</p>
+                <p>Telefone: {usuarioPersonal.telefone}</p>
+                {/* Botão para visualizar perfil */}
+                <Link href={`/Perfil?email=${usuarioPersonal.email}`} passHref>
+                  <button className="bg-blue-500 text-white mt-4 py-2 px-4 rounded-md hover:bg-blue-700">
+                    Ver Perfil
+                  </button>
+                </Link>
+              </div>
+            ))}
           </div>
         </main>
         {/* Rodapé */}

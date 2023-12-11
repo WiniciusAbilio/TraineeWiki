@@ -9,12 +9,12 @@ const urlencodedParser = bodyParser.urlencoded({ extended: false})
 
 // Rota para listar todos os registros de Personal
 router.get('/personal', (req, res) => {
-  db.query('SELECT * FROM Personal', (err, results) => {
+  db.query('SELECT * FROM Personal, Usuario WHERE email = usuario_email', (err, results) => {
     if (err) {
       res.status(500).json({ error: err.message });
       return;
     }
-    res.json({ data: results });
+    res.json({ personais: results });
   });
 });
 

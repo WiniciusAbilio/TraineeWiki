@@ -7,9 +7,27 @@ import axios from 'axios'
 import Logout from '../Components/Utils/logout';
 
 const PaginaTreino = () => {
-
-
     const router = useRouter();
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [exercicios, setExercicios] = useState([]); // Estado para armazenar a lista de exercícios
+
+
+
+    useEffect(() => {
+        // Função para fazer a requisição GET
+        const fetchData = async () => {
+            try {
+                const response = await axios.get('http://localhost:3010/exercicio'); // Substitua com a sua rota real
+                console.log(response)
+                setExercicios(response.data.data); // Assumindo que a resposta contém um campo "data" com os exercícios
+            } catch (error) {
+                console.error('Erro ao obter exercícios:', error);
+            }
+        };
+
+        // Chama a função para buscar os exercícios ao montar o componente
+        fetchData();
+    }, []); // O array vazio assegura que a requisição é feita apenas uma vez ao montar o componente
 
     useEffect(() => {
         if (!verificaTokenValido()) {
@@ -18,61 +36,84 @@ const PaginaTreino = () => {
         }
     }, []);
 
-
-    const [imageFiles, setImageFiles] = useState([]);
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-    const [repeticao, setRepeticao] = useState('');
-    const [series, setSeries] = useState('');
-
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
     };
 
-    const handleContextMenu = (event) => {
-        event.preventDefault();
-        const contextMenu = document.getElementById('contextMenu');
-        contextMenu.style.top = `${event.clientY}px`;
-        contextMenu.style.left = `${event.clientX}px`;
-        contextMenu.style.display = 'block';
+
+    const [grupoTreino, setGrupoTreino] = useState({
+        nome: '',
+        exercicios: [{ id: '', exercicio: '', repeticoes: '', series: '' }],
+    });
+
+
+    const addExercicio = () => {
+        setGrupoTreino({
+            ...grupoTreino,
+            exercicios: [...grupoTreino.exercicios, { exercicio: '', repeticoes: '', series: '' }],
+        });
     };
 
-    const handleAddToWorkout = (file) => {
-        const dados = dadosToken();
-
-        const treinoInfo = {
-            nome_exercicio: file.replace(".png", "").replace(".jpg", ""),
-            repeticoes: repeticao,
-            series: series,
-            Usuario_email: dados.email
-        };
-
-
-        (async () => {
-            try {
-                const response = await axios.post('http://localhost:3010/treino', treinoInfo);
-                console.log(response.data); // Exibe a resposta no console (pode remover isso na versão final)
-            } catch (error) {
-                console.error('Erro ao enviar treino:', error);
-            }
-        })();
-
-
-        const contextMenu = document.getElementById('contextMenu');
-        contextMenu.style.display = 'none';
+    const removeExercicio = (index) => {
+        const updatedExercicios = [...grupoTreino.exercicios];
+        updatedExercicios.splice(index, 1);
+        setGrupoTreino({ ...grupoTreino, exercicios: updatedExercicios });
     };
 
-    useEffect(() => {
-        const fetchImageList = async () => {
-            try {
-                const response = await fetch('/api/listFiles');
-                const data = await response.json();
-                setImageFiles(data.files);
-            } catch (error) {
-                console.error('Error fetching image list:', error);
-            }
-        };
-        fetchImageList();
-    }, []);
+    const handleExercicioChange = (index, key, value) => {
+        const updatedExercicios = [...grupoTreino.exercicios];
+        updatedExercicios[index][key] = value;
+        setGrupoTreino({ ...grupoTreino, exercicios: updatedExercicios });
+    };
+
+    const coletarDados = async () => {
+        const email_usuario = dadosToken().email;
+        // Filtrar exercícios sem valores preenchidos
+        const exerciciosPreenchidos = grupoTreino.exercicios.filter(exercicio => (
+            exercicio.exercicio !== '' && exercicio.repeticoes !== '' && exercicio.series !== ''
+        ));
+
+        // Montar o objeto com os dados coletados
+        const dadosColetados = {
+            email_usuario: email_usuario,
+            grupo_treino_nome_grupo_treino: grupoTreino.nome,
+            exercicios: exerciciosPreenchidos.map(exercicio => ({
+                exercicio_CodigoExercicio: exercicio.exercicio,
+                repeticoes: exercicio.repeticoes,
+                series: exercicio.series
+            }))
+        }
+
+        // Converter para JSON
+        const dadosJSON = JSON.stringify(dadosColetados);
+
+        console.log(dadosJSON)
+
+        // Utilize os dadosJSON conforme necessário (por exemplo, enviando para algum lugar)
+
+
+        try {
+            const response = await axios.post(`http://localhost:3010/grupo_treino/${email_usuario}`, {
+                nome_grupo_treino: grupoTreino.nome
+            });
+
+            console.log('Resposta do servidor:', response.data);
+        } catch (error) {
+            console.error('Erro ao enviar a solicitação POST:', error);
+        }
+
+
+        try {
+            const response = await axios.post(`http://localhost:3010/grupo_treino_exercicio`, dadosColetados);
+
+            console.log('Resposta do servidor:', response.data);
+        } catch (error) {
+            console.error('Erro ao enviar a solicitação POST:', error);
+        }
+
+
+    };
+
 
     return (
         <div className="bg-[#D9D9D9] flex">
@@ -89,12 +130,12 @@ const PaginaTreino = () => {
                                 </a>
                             </div>
                             <div>
-                                <a href="#" className="text-white mt-8 font-semibold text-2xl hover:underline">
+                                <a href="TelaPersonal" className="text-white mt-8 font-semibold text-2xl hover:underline">
                                     Personais
                                 </a>
                             </div>
                             <div>
-                                <a href="#" className="text-white font-semibold text-2xl hover:underline">
+                                <a href="Match" className="text-white font-semibold text-2xl hover:underline">
                                     Matchs
                                 </a>
                             </div>
@@ -137,59 +178,92 @@ const PaginaTreino = () => {
                     </div>
                 </header>
                 {/* Conteúdo principal */}
-                <main className="flex flex-wrap h-full  justify-center">
-                    <div className='flex flex-wrap w-3/4 justify-center'>
-                        {/* Cards */}
-                        <div className='flex flex-wrap w-full h-full justify-center'>
-                            <div id="contextMenu" className="context-menu" style={{ display: 'none' }}>
-                            </div>
-                            {imageFiles.map((file, index) => (
-                                <div className="flex flex-row m-4 w-8/12 justify-between p-4 bg-white rounded-md shadow-md" onContextMenu={handleContextMenu}>
-                                    <div>
-                                        <h2 className="text-lg text-black font-semibold mt-2">{file.replace(".png", "").replace(".jpg", "")}</h2>
-                                
-                                    </div>
-                                    <div className='flex flex-row justify-center text-black items-center w-4/6 h-full '>
-                                        <div className='flex flex-row justify-center items-center'>
-                                            <div className='flex flex-col m-5'>
-                                                <span className='text-xl mb-2 text-black font-bold'>repetição</span>
-                                                <input
-                                                    className='w-20 border-2 border-[#2BB4DF] text-black rounded-md'
-                                                    type="number"
-                                                    name="repeticao"
-                                                    id="repeticao"
-                                                    onChange={(e) => setRepeticao(e.target.value)}
-                                                />
-                                            </div>
-                                            <div>
+                <main className="flex flex-wrap h-full justify-center">
+                    <div className="w-full md:w-1/2 lg:w-1/3 p-6">
+                        <div className="bg-white border-t-4 border-green-500 rounded-lg p-6">
+                            <h2 className="text-xl font-semibold mb-4">Criar Grupo de Treino</h2>
+                            <form className="flex flex-col">
+                                <label className="mb-2">Nome do Grupo de Treino:</label>
+                                <input
+                                    type="text"
+                                    className="p-2 mb-4 border rounded"
+                                    placeholder="Informe o nome do grupo de treino"
+                                    value={grupoTreino.nome}
+                                    onChange={(e) => setGrupoTreino({ ...grupoTreino, nome: e.target.value })}
+                                />
 
-                                            </div>
-                                            <div className='flex flex-col m-5'>
-                                                <span className='text-xl mb-2 text-black font-bold'>séries</span>
-                                                <input
-                                                    className='w-20 border-2 border-[#2BB4DF] text-black rounded-md'
-                                                    type="number"
-                                                    name="series"
-                                                    id="series"
-                                                    onChange={(e) => setSeries(e.target.value)}
-                                                />
-                                            </div>
+                                {grupoTreino.exercicios.map((exercicio, index) => (
+                                    <div key={index} className="flex mb-4">
+                                        <div className="flex-1 mr-2">
+                                            <label className="mb-2">Escolha um exercício:</label>
+                                            <select
+                                                className="p-2 border rounded w-full"
+                                                value={exercicio.exercicio}
+                                                onChange={(e) => handleExercicioChange(index, 'exercicio', e.target.value)}
+                                            >
+                                                <option value="">Selecione um exercício</option>
+                                                {exercicios.map((ex) => (
+                                                    <option key={ex.Codigo_Exercicio} value={ex.Codigo_Exercicio}>
+                                                        {ex.nome_exercicio}
+                                                    </option>
+                                                ))}
+                                            </select>
                                         </div>
+                                        <div className="flex-1 ml-2">
+                                            <label className="mb-2">Repetições:</label>
+                                            <input
+                                                type="number"
+                                                className="p-2 border rounded w-full"
+                                                placeholder="Informe as repetições"
+                                                value={exercicio.repeticoes}
+                                                onChange={(e) => handleExercicioChange(index, 'repeticoes', e.target.value)}
+                                            />
+                                        </div>
+                                        <div className="flex-1 ml-2">
+                                            <label className="mb-2">Séries:</label>
+                                            <input
+                                                type="number"
+                                                className="p-2 border rounded w-full"
+                                                placeholder="Informe as séries"
+                                                value={exercicio.series}
+                                                onChange={(e) => handleExercicioChange(index, 'series', e.target.value)}
+                                            />
+                                        </div>
+                                        <button
+                                            type="button"
+                                            className="bg-red-500 text-white rounded p-2 hover:bg-red-600 cursor-pointer ml-2"
+                                            onClick={() => removeExercicio(index)}
+                                        >
+                                            Remover
+                                        </button>
                                     </div>
-                                    <button className="ml-4 bg-[#2BB4DF] text-white px-4 py-2 rounded-md" onClick={() => handleAddToWorkout(file)}>
-                                        Adicionar
-                                    </button>
-                                </div>
-                            ))}
+                                ))}
+
+                                <button
+                                    type="button"
+                                    className="bg-green-500 text-white rounded p-2 hover:bg-green-600 cursor-pointer"
+                                    onClick={addExercicio}
+                                >
+                                    Adicionar Exercício
+                                </button>
+                                <button
+                                    type="button"
+                                    className="bg-green-500 text-white rounded p-2 hover:bg-green-600 cursor-pointer mt-4"
+                                    onClick={coletarDados}
+                                >
+                                    Criar Grupo de Treino
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </main>
+
                 {/* Rodapé */}
                 <footer className="bg-[#7AE582] p-4 shadow-md text-center">
                     <p>&copy; 2023 TraineWiki. Todos os direitos reservados.</p>
                 </footer>
             </div>
-        </div>
+        </div >
     );
 };
 

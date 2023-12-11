@@ -23,7 +23,7 @@ router.get('/usuario', (req, res) => {
 
 router.post('/usuario', urlencodedParser, async (req, res) => {
   const { email, nome, senha, altura, peso, data_nascimento, cpf, cidade, estado, genero, descricao, telefone } = req.body;
-  const values = [email, nome, md5(senha), altura, peso, data_nascimento, cidade, estado, genero, descricao, telefone];
+  const values = [email, nome, md5(String(senha)), altura, peso, data_nascimento, cidade, estado, genero, descricao, telefone];
 
   if (cpf !== undefined) {
     const url = 'http://localhost:3010/personal';
@@ -47,32 +47,45 @@ router.post('/usuario', urlencodedParser, async (req, res) => {
 
   db.query('INSERT INTO Usuario (email, nome, senha, altura, peso, data_nascimento, cidade, estado, genero, descricao, telefone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', values, (err, result) => {
     if (err) {
-      if(err.code == 'ER_DUP_ENTRY'){
+      if (err.code == 'ER_DUP_ENTRY') {
         res.redirect('http://localhost:3000/');
       }
       res.status(500).json({ error: err.message });
 
       return;
     }
-    
+
     res.redirect('http://localhost:3000/');
   });
 
 });
 // Rota para atualizar um usuário
-router.put('/usuario/:email', urlencodedParser, (req, res) => {
-  const { email } = req.params;
-  const { nome, senha, altura, peso, data_nascimento, cidade, estado, genero, descricao, telefone } = req.body;
-  const values = [nome, md5(senha), altura, peso, data_nascimento, cidade, estado, genero, descricao, telefone, email];
+router.put('/usuario/:email', (req, res) => {
+  const email = req.params.email;
+  let query = 'UPDATE Usuario SET nome = ?, senha = ?, altura = ?, peso = ?, genero = ?, telefone = ?, data_nascimento = ?, estado = ?, cidade = ?, descricao = ? WHERE email = ?';
 
-  db.query('UPDATE Usuario SET nome = ?, senha = ?, altura = ?, peso = ?, data_nascimento = ?, cidade = ?, estado = ?, genero = ?, descricao = ?, telefone = ? WHERE email = ?', values, (err, result) => {
+  const { nome, senha, altura, peso, genero, telefone, data_nascimento, estado, cidade, descricao } = req.body;
+
+  let values;
+  if (senha == undefined) {
+    query = 'UPDATE Usuario SET nome = ?, altura = ?, peso = ?, genero = ?, telefone = ?, data_nascimento = ?, estado = ?, cidade = ?, descricao = ? WHERE email = ?';
+    values = [nome, altura, peso, genero, telefone, data_nascimento, estado, cidade, descricao, email];
+  } else {
+    const hashedSenha = String(md5(senha)); // Use a função md5 para a senha
+    values = [nome, hashedSenha, altura, peso, genero, telefone, data_nascimento, estado, cidade, descricao, email];
+  }
+
+
+  db.query(query, values, (err, result) => {
     if (err) {
       res.status(500).json({ error: err.message });
       return;
     }
     res.json({ message: 'Usuário atualizado com sucesso!' });
   });
+
 });
+
 
 // Rota para excluir um usuário
 router.delete('/usuario/:email', (req, res) => {

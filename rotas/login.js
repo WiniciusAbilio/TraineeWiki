@@ -31,12 +31,12 @@ router.post('/login', (req, res) => {
             nome: user.nome,
             altura: user.altura,
             peso: user.peso,
-            data_nascimento: user.data_nascimento,
-            cidade: user.cidade,
-            estado: user.estado,
             genero: user.genero,
-            descricao: user.descricao,
-            telefone: user.telefone
+            telefone: user.telefone,
+            data_nascimento: user.data_nascimento,
+            estado: user.estado,
+            cidade: user.cidade,
+            descricao: user.descricao
           };
       
           // Chave secreta para assinar o token (mantenha isso em segredo em um ambiente real)
