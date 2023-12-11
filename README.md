@@ -54,8 +54,4 @@ O projeto agora está em execução! Abra seu navegador e acesse `http://localho
 
 - **Encontrar Gymbros:** Conecte-se com outros entusiastas do fitness e compartilhe experiências.
 
-- **Guias de Treinamento:** Explore guias e dicas especializadas para otimizar seus treinos.
-
-- **Edição de Perfil:** Personalize suas informações de perfil para refletir seu estilo de treino.
-
 Lembre-se de ajustar as configurações do banco de dados, como host, usuário, senha e nome do banco de dados, conforme necessário para o seu ambiente. Divirta-se explorando e aprimorando seus treinos no TraineeWiki!
