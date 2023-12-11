@@ -1,14 +1,9 @@
 const express = require('express');
+const cors = require('cors');
 const bodyParser = require('body-parser');
 require('dotenv').config({ path: '../variaveis.env' });
-const cors = require('cors')
-
-
-
 
 const app = express();
-
-
 const port = process.env.PORT;
 
 const usuarioRoutes = require('../rotas/usuario');
@@ -16,18 +11,10 @@ const personalRoutes = require('../rotas/personal');
 const treinoRoutes = require('../rotas/treino');
 const login = require('../rotas/login');
 
-
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-const corsOptions = {
-  origin: 'http://localhost:3000',
-  optionsSuccessStatus: 200, 
-};
-
-app.use(cors(corsOptions));
-
-//Rotas de inserçao no banco
+app.use(cors()); // Aplica o middleware cors apenas para a rota '/login'
 
 app.use('/', usuarioRoutes);
 app.use('/', personalRoutes);
