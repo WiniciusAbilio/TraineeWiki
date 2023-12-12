@@ -91,10 +91,10 @@ DEFAULT CHARACTER SET = utf8mb3;
 -- -----------------------------------------------------
 -- Table `mydb`.`match`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`match` (
+CREATE TABLE IF NOT EXISTS `mydb`.`matchUsuario` (
   `usuario_email` VARCHAR(100) NOT NULL,
   `usuario_email2` VARCHAR(100) NOT NULL,
-  `aceito` ENUM('aceito', 'recusado', 'esperando') NOT NULL,
+  `aceito` VARCHAR(100) NOT NULL,
   PRIMARY KEY (`usuario_email`, `usuario_email2`),
   INDEX `fk_match_usuario1_idx` (`usuario_email` ASC) VISIBLE,
   INDEX `fk_match_usuario2_idx` (`usuario_email2` ASC) VISIBLE,

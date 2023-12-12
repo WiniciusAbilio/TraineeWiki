@@ -9,7 +9,7 @@ const urlencodedParser = bodyParser.urlencoded({ extended: false})
 
 // Rota para listar todos os registros de Personal
 router.get('/personal', (req, res) => {
-  db.query('SELECT * FROM Personal, Usuario WHERE email = usuario_email', (err, results) => {
+  db.query('SELECT * FROM personal, usuario WHERE email = usuario_email', (err, results) => {
     if (err) {
       res.status(500).json({ error: err.message });
       return;
@@ -27,7 +27,7 @@ router.post('/personal', urlencodedParser, (req, res) => {
   }
   const values = [cpf, Usuario_email];
   
-  db.query('INSERT INTO Personal (cpf, Usuario_email) VALUES (?, ?)', values, (err, result) => {
+  db.query('INSERT INTO personal (cpf, Usuario_email) VALUES (?, ?)', values, (err, result) => {
     if (err) {
       res.status(500).json({ error: err.message });
       return;
@@ -46,7 +46,7 @@ router.put('/personal/:Usuario_email', urlencodedParser, (req, res) => {
   }
   const values = [cpf, Usuario_email];
   
-  db.query('UPDATE Personal SET cpf = ? WHERE Usuario_email = ?', values, (err, result) => {
+  db.query('UPDATE personal SET cpf = ? WHERE Usuario_email = ?', values, (err, result) => {
     if (err) {
       res.status(500).json({ error: err.message });
       return;
@@ -59,7 +59,7 @@ router.put('/personal/:Usuario_email', urlencodedParser, (req, res) => {
 router.delete('/personal/:Usuario_email', (req, res) => {
   const { Usuario_email } = req.params;
   
-  db.query('DELETE FROM Personal WHERE Usuario_email = ?', [Usuario_email], (err, result) => {
+  db.query('DELETE FROM personal WHERE Usuario_email = ?', [Usuario_email], (err, result) => {
     if (err) {
       res.status(500).json({ error: err.message });
       return;

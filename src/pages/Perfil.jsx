@@ -4,6 +4,8 @@ import { faBars, faBell, faUserCircle } from '@fortawesome/free-solid-svg-icons'
 import { useRouter } from 'next/router';
 import { dadosToken, verificaTokenValido } from '../Components/Utils/autenticador';
 import Logout from '../Components/Utils/logout';
+import axios from 'axios';
+
 
 const Perfil = () => {
   const router = useRouter();
@@ -75,8 +77,12 @@ const Perfil = () => {
 
   const handleDarMatch = async () => {
     try {
+      const email_usuario = dadosToken().email;
       const email_match = getEmailFromUrl();
-      const response = await axios.post(`http://localhost:3010/match/${email_usuario}/${email_match}`,);
+      const data = {
+        aceito: 'esperando'
+      }
+      const response = await axios.post(`http://localhost:3010/match/${email_usuario}/${email_match}`, data);
 
       console.log('Match realizado com sucesso!', response.data);
       // Adicione aqui qualquer lógica adicional após um match bem-sucedido

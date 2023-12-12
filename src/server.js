@@ -14,7 +14,9 @@ const login = require('../rotas/login');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use(cors()); // Aplica o middleware cors apenas para a rota '/login'
+
+
+app.use(cors());
 
 app.use('/', usuarioRoutes);
 app.use('/', personalRoutes);

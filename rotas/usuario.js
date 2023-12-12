@@ -8,7 +8,7 @@ const md5 = require('md5');
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 router.get('/usuario', (req, res) => {
-  db.query('SELECT * FROM Usuario', (err, result) => {
+  db.query('SELECT * FROM usuario', (err, result) => {
     if (err) {
       // Se ocorrer um erro durante a consulta
       console.error('Erro ao buscar usuários:', err);
@@ -36,7 +36,7 @@ router.post('/usuario', urlencodedParser, async (req, res) => {
     request({
       url: url,
       method: "POST",
-      json: true,   // <--Very important!!!
+      json: true,   
       body: dados
     }, function (error, response, body) {
 
@@ -45,7 +45,7 @@ router.post('/usuario', urlencodedParser, async (req, res) => {
 
   }
 
-  db.query('INSERT INTO Usuario (email, nome, senha, altura, peso, data_nascimento, cidade, estado, genero, descricao, telefone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', values, (err, result) => {
+  db.query('INSERT INTO usuario (email, nome, senha, altura, peso, data_nascimento, cidade, estado, genero, descricao, telefone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', values, (err, result) => {
     if (err) {
       if (err.code == 'ER_DUP_ENTRY') {
         res.redirect('http://localhost:3000/');
@@ -62,13 +62,13 @@ router.post('/usuario', urlencodedParser, async (req, res) => {
 // Rota para atualizar um usuário
 router.put('/usuario/:email', (req, res) => {
   const email = req.params.email;
-  let query = 'UPDATE Usuario SET nome = ?, senha = ?, altura = ?, peso = ?, genero = ?, telefone = ?, data_nascimento = ?, estado = ?, cidade = ?, descricao = ? WHERE email = ?';
+  let query = 'UPDATE usuario SET nome = ?, senha = ?, altura = ?, peso = ?, genero = ?, telefone = ?, data_nascimento = ?, estado = ?, cidade = ?, descricao = ? WHERE email = ?';
 
   const { nome, senha, altura, peso, genero, telefone, data_nascimento, estado, cidade, descricao } = req.body;
 
   let values;
   if (senha == undefined) {
-    query = 'UPDATE Usuario SET nome = ?, altura = ?, peso = ?, genero = ?, telefone = ?, data_nascimento = ?, estado = ?, cidade = ?, descricao = ? WHERE email = ?';
+    query = 'UPDATE usuario SET nome = ?, altura = ?, peso = ?, genero = ?, telefone = ?, data_nascimento = ?, estado = ?, cidade = ?, descricao = ? WHERE email = ?';
     values = [nome, altura, peso, genero, telefone, data_nascimento, estado, cidade, descricao, email];
   } else {
     const hashedSenha = String(md5(senha)); // Use a função md5 para a senha
@@ -91,7 +91,7 @@ router.put('/usuario/:email', (req, res) => {
 router.delete('/usuario/:email', (req, res) => {
   const { email } = req.params;
 
-  db.query('DELETE FROM Usuario WHERE email = ?', [email], (err, result) => {
+  db.query('DELETE FROM usuario WHERE email = ?', [email], (err, result) => {
     if (err) {
       res.status(500).json({ error: err.message });
       return;
@@ -100,5 +100,27 @@ router.delete('/usuario/:email', (req, res) => {
   });
 });
 
+
+router.post('/match/:usuario_email/:usuario_email2', async (req, res) => {
+  const { usuario_email, usuario_email2} = req.params;
+  const aceito = req.body;
+  
+  const values = [usuario_email, usuario_email2, aceito];
+
+  db.query('INSERT INTO matchUsuario(usuario_email, usuario_email2, aceito) VALUES (?, ?, ?)', values, (err, result) => {
+    if (err) {
+      if (err.code == 'ER_DUP_ENTRY') {
+        res.redirect('http://localhost:3000/');
+      }
+      res.status(500).json({ error: err.message });
+      return;
+    }
+
+    res.redirect('http://localhost:3000/');
+  });
+
+
+
+});
 
 module.exports = router;

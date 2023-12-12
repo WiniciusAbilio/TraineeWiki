@@ -13,7 +13,7 @@ router.use(bodyParser.urlencoded({ extended: true }));
 router.post('/login', (req, res) => {
     const { email, senha} = req.body;
 
-    db.query('SELECT * FROM Usuario WHERE email = ?', email, (err, result) => {
+    db.query('SELECT * FROM usuario WHERE email = ?', email, (err, result) => {
       if (err) {
         res.status(500).json({ error: err.message });
         return;
